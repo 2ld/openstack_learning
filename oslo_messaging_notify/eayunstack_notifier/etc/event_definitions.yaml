@@ -1,0 +1,37 @@
+---
+- event_type: compute.instance.*
+  Action: ChangeVMStatus
+  Actiontype: 
+    fields: event_type
+  Timestamp: 
+    fields: timestamp
+  resid: 
+    fields: payload.instance_id
+  status: 
+    fields: payload.state
+  vol-id: 
+    fields: payload.volume_id
+- event_type: volume.*
+  Action: ChangeVolumeStatus
+  Actiontype: 
+    fields: event_type
+  Timestamp: 
+    fields: timestamp
+  resid: 
+    fields: payload.volume_id
+  status: 
+      fields: payload.status
+  vm-id: 
+      fields: payload.instance_uuid
+- event_type: image.*
+  Action: ChangeImagesStatus
+  Actiontype: 
+    fields: event_type
+  Timestamp: 
+    fields: timestamp
+  resid: 
+    fields: payload.id
+  status: 
+    fields: payload.status
+  vm-id: 
+    fields: payload.properties.instance_uuid
