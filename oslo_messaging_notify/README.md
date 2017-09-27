@@ -1,5 +1,12 @@
-### Transport
+## Oslo messaging
 
+Oslo messaging提供了两个独立的API：
+1. oslo.messaging.rpc，实现了客户端-服务器远程过程调用；
+2. oslo.messaging.notify，推送和处理事件通知。
+
+接下来介绍oslo messaging中的几个重要的概念。 
+### Transport
+Transport：处理消息发送的抽象层。
 RPC创建`transport`方式：
 ```
 def get_rpc_transport(conf, url=None,
@@ -88,3 +95,15 @@ oslo_messaging.RPCClient(transport, target, timeout=None, version_cap=None, seri
 支持两种方式：RPC calls and RPC casts.
 RPC calls：同步调用，通常情况下，同步调用`server`端的方法，该方法都会有一个返回值。
 RPC casts：异步调用，调用的`server`端的方法是没有返回值的。
+
+### notify
+对于notify我们重点关注它是如何监听消息的。
+创建notify的listener时，需要提供一个`transport`，一个`Target`和一组`endpoint`。
+创建方式如下：
+```
+oslo_messaging.get_notification_listener(transport, targets, endpoints, executor='blocking', serializer=None, allow_requeue=False, pool=None)
+```
+其中，`transport`,`targets`,`endpoints`,`executor`的上边已经介绍过，不在赘述，需要注意的是`allow_requeue`参数，是否需要支持NotificationResult.REQUEUE，即如果`allow_requeue`设置为`True`时，允许消息重复发送，反之则不行。
+参考链接：
+1. [RabbitMQ and Oslo.messaging](http://www.openstack.cn/?p=3514)
+2. [Openstack 官网](https://docs.openstack.org/oslo.messaging/latest/reference/index.html)
